@@ -14,7 +14,7 @@ let conf = {
     platformMoveSpeed: 10,
     // block
     blockScore: 1,
-    blocksNum: 5,
+    blocksNum: 10,
 }
 let gState = 0
 let cvs = null
@@ -408,6 +408,14 @@ const drawGame = () => {
     gBall.x += gBall.vx
     gBall.y += gBall.vy
 
+    const high = localStorage.getItem("high") || "0"
+    ctx.font = "12px Arial"
+    ctx.fillStyle = "black"
+    ctx.textAlign = "right"
+    ctx.fillText(`Score: ${gScore}`, cvs.width - 10, 20)
+    ctx.fillText(`High score: ${high}`, cvs.width - 10, 30)
+    ctx.textAlign = "center"
+
     if (gBall.y > cvs.height) {
         gState = 2
         drawGameOver()
@@ -448,6 +456,7 @@ const drawGameWin = () => {
             block.life = block.startLife
         })
     })
+    gBlocks.broken = conf.blocksNum
 
     localStorage.setItem("prev", gScore)
     if (gScore > localStorage.getItem("high")) {
@@ -486,6 +495,7 @@ const drawGameOver = () => {
             block.life = block.startLife
         })
     })
+    gBlocks.broken = conf.blocksNum
 
     localStorage.setItem("prev", gScore)
     if (gScore > localStorage.getItem("high")) {
