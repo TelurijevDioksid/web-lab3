@@ -14,7 +14,7 @@ let conf = {
     platformMoveSpeed: 10,
     // block
     blockScore: 1,
-    blocksNum: 10,
+    blocksNum: 5,
 }
 let gState = 0
 let cvs = null
@@ -105,12 +105,12 @@ const initBlocks = () => {
     const rows = Math.ceil(conf.blocksNum / blocksPerRow)
     let blocksLeft = conf.blocksNum
 
+    gBlocks.broken = conf.blocksNum
     gBlocks.arr = new Array(rows)
     for (let i = 0; i < gBlocks.arr.length; i++) {
         gBlocks.arr[i] = new Array(blocksLeft > blocksPerRow ? blocksPerRow : blocksLeft)
         blocksLeft -= blocksPerRow
         for (let j = 0; j < gBlocks.arr[i].length; j++) {
-            gBlocks.broken += 1
             gBlocks.arr[i][j] = {
                 x: j * blockWidth,
                 y: i * blockHeight,
@@ -156,32 +156,12 @@ const startUp = () => {
         cvs.width = s.width
         cvs.height = s.height
 
-        switch (gState) {
-            case 0:
-                window.cancelAnimationFrame(raf)
-                drawMenu()
-                break
-            case 1:
-                window.cancelAnimationFrame(raf)
-                drawGame()
-                break
-            case 2:
-                drawGameOver()
-                break
-            case 3:
-                window.cancelAnimationFrame(raf)
-                drawOptions()
-                break
-            case 4:
-                window.cancelAnimationFrame(raf)
-                drawGameWin()
-                break
-            default:
-                ctx.font = "30px Arial"
-                ctx.fillStyle = "black"
-                ctx.fillText("Invalid game state, refresh page", cvs.width / 2, cvs.height - (0.8 * cvs.height))
-                break
-        }
+        window.cancelAnimationFrame(raf) || null
+        ctx.clearRect(0, 0, cvs.width, cvs.height)
+        ctx.font = "30px Arial"
+        ctx.textAlign = "center"
+        ctx.fillStyle = "black"
+        ctx.fillText("Window changed, please refresh page!", cvs.width / 2, cvs.height - (0.5 * cvs.height))
     }
 
     cvs.onkeydown = (e) => {
